@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVNIT Physics Dept. Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <header class="header">
+            <img src="{{ url_for('static', filename='images/SVNIT_logo.png') }}" alt="SVNIT Logo" class="logo">
+            <h1>Sardar Vallabhbhai National Institute of Technology</h1>
+            <h2>Department of Physics</h2>
+        </header>
+        
+
+        <main class="card">
+            <div class="intro-text">
+                <h3>Welcome to the Physics Inquiry Assistant</h3>
+                <p>
+                    This is an AI-powered conversational agent designed specifically to assist students, 
+                    faculty, and visitors with information regarding the <strong>Department of Physics</strong>.
+                </p>
+            </div>
+
+            <div class="warning-box">
+                <strong>Please Note:</strong>
+                <p>This chatbot is specialized. It can <u>only</u> answer queries related to the Physics Department. 
+                It cannot provide information regarding other departments (CS, Mechanical, etc.) or general administrative queries.</p>
+            </div>
+
+            <div class="action-area">
+                <a href="/chat" class="chat-btn">Start Chatting</a>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 SVNIT Surat | Department of Physics AI Initiative</p>
+        </footer>
+    </div>
+
+</body>
+</html>

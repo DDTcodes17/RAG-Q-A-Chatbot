@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - Physics Dept. Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="chat-body">
+
+    <div class="chat-container">
+        
+        <header class="chat-header">
+            <div class="header-left">
+                <img src="{{ url_for('static', filename='images/SVNIT_logo.png') }}" alt="SVNIT Logo" class="chat-logo">
+                <div>
+                    <h2>Physics Dept. Assistant</h2>
+                    <span class="status-dot"></span> <small>Online</small>
+                </div>
+            </div>
+            <a href="/" class="home-link">Back to Home</a>
+        </header>
+
+        <div id="chat-window" class="chat-window">
+            <div class="message bot-message">
+                <div class="bubble">
+                    Hello! I am the AI Assistant for the SVNIT Physics Department. How can I help you today?
+                </div>
+                <span class="timestamp">10:00 AM</span>
+            </div>
+
+            <div class="message user-message">
+                <div class="bubble">
+                    What are the research areas in the department?
+                </div>
+                <span class="timestamp">10:01 AM</span>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <form id="chat-form" class="input-form">
+                <input type="text" id="user-input" placeholder="Type your query..." autocomplete="off" required>
+                <button type="submit" class="send-btn">
+                    &#10148; Send
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+</body>
+</html>

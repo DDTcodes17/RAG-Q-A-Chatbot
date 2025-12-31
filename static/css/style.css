@@ -1,0 +1,301 @@
+/* 1. Global Reset & Professional Font */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif; /* Clean, modern font */
+    background-color: #f4f7f6; /* Very light grey background - easy on eyes */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* 2. Main Container */
+.container {
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+    padding: 20px;
+}
+
+/* 3. Header & Logo */
+.header {
+    margin-bottom: 30px;
+}
+
+.logo {
+    width: 120px; /* Adjust based on your actual logo file */
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.header h1 {
+    font-size: 22px;
+    color: #003366; /* SVNIT Academic Navy Blue */
+    margin: 5px 0;
+    font-weight: 700;
+}
+
+.header h2 {
+    font-size: 18px;
+    color: #555;
+    margin: 0;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* 4. The Central Card */
+.card {
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Soft shadow for depth */
+    border-top: 5px solid #003366; /* Professional accent bar at top */
+}
+
+.intro-text h3 {
+    color: #003366;
+    margin-bottom: 15px;
+}
+
+.intro-text p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #444;
+    margin-bottom: 25px;
+}
+
+/* 5. The Disclaimer Box (Crucial) */
+.warning-box {
+    background-color: #eef5fa; /* Very light blue background */
+    border-left: 4px solid #d9534f; /* Red accent to indicate warning/limit */
+    padding: 15px;
+    text-align: left;
+    margin-bottom: 30px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.warning-box strong {
+    color: #d9534f;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* 6. The Button */
+.chat-btn {
+    display: inline-block;
+    background-color: #003366; /* Navy Blue */
+    color: white;
+    padding: 15px 40px;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 50px; /* Rounded pill shape */
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.chat-btn:hover {
+    background-color: #002244; /* Darker blue on hover */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* 7. Footer */
+footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: #888;
+}
+
+/* =========================================
+   CHAT PAGE SPECIFIC STYLES
+   ========================================= */
+
+/* Make body fill the screen without scrolling the whole page */
+.chat-body {
+    background-color: #eef1f5; /* Slightly darker grey for contrast */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    overflow: hidden; /* Prevent body scroll, only chat window scrolls */
+}
+
+/* Main Chat Card */
+.chat-container {
+    width: 100%;
+    max-width: 900px; /* Wider than home page for better reading */
+    background: white;
+    display: flex;
+    flex-direction: column;
+    height: 95vh; /* Takes up 95% of screen height */
+    margin-top: 2.5vh;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* --- Header --- */
+.chat-header {
+    background-color: #003366; /* SVNIT Navy */
+    color: white;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #002244;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.chat-logo {
+    width: 40px;
+    height: auto;
+    background: white;
+    border-radius: 50%;
+    padding: 2px;
+}
+
+.chat-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.status-dot {
+    height: 8px;
+    width: 8px;
+    background-color: #28a745; /* Green for Online */
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.chat-header small {
+    color: #ccc;
+    font-size: 12px;
+}
+
+.home-link {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.home-link:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+/* --- Chat Window (The scrollable part) --- */
+.chat-window {
+    flex: 1; /* Takes all remaining space */
+    padding: 20px;
+    overflow-y: auto; /* Enables scrolling */
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Message Bubbles */
+.message {
+    display: flex;
+    flex-direction: column;
+    max-width: 75%;
+}
+
+.bubble {
+    padding: 12px 18px;
+    border-radius: 15px;
+    font-size: 15px;
+    line-height: 1.5;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.timestamp {
+    font-size: 11px;
+    color: #999;
+    margin-top: 5px;
+}
+
+/* Bot Style (Left) */
+.bot-message {
+    align-self: flex-start;
+}
+
+.bot-message .bubble {
+    background-color: #ffffff;
+    color: #333;
+    border-top-left-radius: 2px; /* Visual cue for left side */
+    border: 1px solid #e0e0e0;
+}
+
+/* User Style (Right) */
+.user-message {
+    align-self: flex-end;
+    align-items: flex-end; /* Aligns timestamp to right */
+}
+
+.user-message .bubble {
+    background-color: #003366; /* SVNIT Navy */
+    color: white;
+    border-top-right-radius: 2px; /* Visual cue for right side */
+}
+
+/* --- Input Area --- */
+.input-area {
+    padding: 20px;
+    background-color: white;
+    border-top: 1px solid #eee;
+}
+
+.input-form {
+    display: flex;
+    gap: 10px;
+}
+
+#user-input {
+    flex: 1; /* Takes up all space except button */
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 30px;
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+#user-input:focus {
+    border-color: #003366;
+}
+
+/* Placeholder styling */
+#user-input::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+.send-btn {
+    background-color: #003366;
+    color: white;
+    border: none;
+    padding: 0 25px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+    transition: background-color 0.3s;
+}
+
+.send-btn:hover {
+    background-color: #002244;
+}
