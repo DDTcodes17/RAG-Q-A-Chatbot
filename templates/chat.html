@@ -15,7 +15,7 @@
             <div class="header-left">
                 <img src="{{ url_for('static', filename='images/SVNIT_logo.png') }}" alt="SVNIT Logo" class="chat-logo">
                 <div>
-                    <h2>Physics Dept. Assistant</h2>
+                    <h2>PhyBot</h2>
                     <span class="status-dot"></span> <small>Online</small>
                 </div>
             </div>
@@ -29,13 +29,6 @@
                 </div>
                 <span class="timestamp">10:00 AM</span>
             </div>
-
-            <div class="message user-message">
-                <div class="bubble">
-                    What are the research areas in the department?
-                </div>
-                <span class="timestamp">10:01 AM</span>
-            </div>
         </div>
 
         <div class="input-area">
@@ -48,6 +41,69 @@
         </div>
 
     </div>
+    <script>
+    const chatForm = document.getElementById('chat-form');
+    const userInput = document.getElementById('user-input');
+    const chatWindow = document.getElementById('chat-window');
+
+    // Function to add a message bubble to the chat window
+    function appendMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
+        
+        const bubbleDiv = document.createElement('div');
+        bubbleDiv.classList.add('bubble');
+        bubbleDiv.textContent = text;
+        
+        // Add timestamp
+        const timeSpan = document.createElement('span');
+        timeSpan.classList.add('timestamp');
+        const now = new Date();
+        timeSpan.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        messageDiv.appendChild(bubbleDiv);
+        messageDiv.appendChild(timeSpan);
+        chatWindow.appendChild(messageDiv);
+
+        // Auto-scroll to bottom
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    // Handle Form Submit
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Prevent page reload
+        
+        const message = userInput.value.trim();
+        if (!message) return;
+
+        // 1. Show User Message Immediately
+        appendMessage(message, 'user');
+        userInput.value = ''; // Clear input
+
+        // 2. Create the JSON payload (This is where "msg" comes from!)
+        const payload = { msg: message };
+
+        try {
+            // 3. Send POST request to Flask
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+
+            // 4. Show Bot Response
+            appendMessage(data.response, 'bot');
+
+        } catch (error) {
+            console.error('Error:', error);
+            appendMessage("Sorry, something went wrong. Please try again.", 'bot');
+        }
+    });
+    </script>
 
 </body>
 </html>
