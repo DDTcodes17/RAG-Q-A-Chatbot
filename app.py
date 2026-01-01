@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import os
 import requests
+import json
 from prompts import contextualize_q_system_prompt, qa_system_prompt
 
 from langchain_classic.chains import create_history_aware_retriever, create_retrieval_chain
@@ -27,7 +28,7 @@ def get_documents():
 
 #Chunking
 def get_chunks(docs):
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size = 800, chubk_overlap=100, length_function=len)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size = 2000, chunk_overlap=400, length_function=len)
     chunks = text_splitter.split_documents(docs)
     return chunks
 
@@ -39,7 +40,7 @@ def get_embeddings():
 
     if os.path.exists(FAISS_PATH):
         print("Index exists. Loading from {path}")
-        db = FAISS.load_local(chunks, HuggingFaceEmbeddings(), allow_dangerous_deserialization=True)
+        db = FAISS.load_local(FAISS_PATH, HuggingFaceEmbeddings(), allow_dangerous_deserialization=True)
     else:
         print("Index doesn't exits, hence creating one")
 
@@ -50,16 +51,16 @@ def get_embeddings():
 
 def get_retriever():
     db = get_embeddings()
-    retriever = db.as_retriever()
+    retriever = db.as_retriever(search_type="similarity", search_kwargs={"k":10})
     return retriever
 
 llm = ChatOllama(model="llama3.1:8b")
 
 # Hitsory aware retriever
-context_q_prompt = ChatPromptTemplate.from_messages([("system", contextualize_q_system_prompt), MessagesPlaceholder("chat_history"), ("human","{question}")])
+context_q_prompt = ChatPromptTemplate.from_messages([("system", contextualize_q_system_prompt), MessagesPlaceholder("chat_history"), ("human","{input}"),])
 history_aware_retriever = create_history_aware_retriever(llm, get_retriever(), context_q_prompt)
 
-qa_prompt = ChatPromptTemplate.from_messages([("system", qa_system_prompt), MessagesPlaceholder("chat_history"), ("human", "{question}")])
+qa_prompt = ChatPromptTemplate.from_messages([("system", qa_system_prompt), MessagesPlaceholder("chat_history"), ("human", "{input}"),])
 
 # Stuffing chain type, creates the Answerer 
 qa_chain = create_stuff_documents_chain(llm, qa_prompt)
@@ -81,6 +82,27 @@ def chat_page():
         data = request.json
 
         user_input = data.get("msg")
+
+        session_id = "User_Physics"
+        if session_id not in chat_history:
+            chat_history[session_id] = []
+        
+        current_history = chat_history[session_id]
+
+        retrieved_docs = get_retriever().invoke(user_input)
+        print(f"Found {len(retrieved_docs)} documents")
+        print(retrieved_docs[0].page_content)
+
+        response = rag_chain.invoke({
+            "chat_history": current_history,
+            "input": user_input
+        })
+        answer = response['answer']
+
+        current_history.append(HumanMessage(content = user_input))
+        current_history.append(AIMessage(content = answer))
+
+        return jsonify({"response": answer})
         
 
 if __name__ == "__main__":

@@ -46,7 +46,7 @@
     const userInput = document.getElementById('user-input');
     const chatWindow = document.getElementById('chat-window');
 
-    // Function to add a message bubble to the chat window
+    // Helper: Add Message
     function appendMessage(text, sender) {
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
@@ -55,7 +55,6 @@
         bubbleDiv.classList.add('bubble');
         bubbleDiv.textContent = text;
         
-        // Add timestamp
         const timeSpan = document.createElement('span');
         timeSpan.classList.add('timestamp');
         const now = new Date();
@@ -64,46 +63,67 @@
         messageDiv.appendChild(bubbleDiv);
         messageDiv.appendChild(timeSpan);
         chatWindow.appendChild(messageDiv);
-
-        // Auto-scroll to bottom
         chatWindow.scrollTop = chatWindow.scrollHeight;
     }
 
-    // Handle Form Submit
-    chatForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Prevent page reload
+    // Helper: Show Loading Indicator
+    function showLoading() {
+        const loadingDiv = document.createElement('div');
+        loadingDiv.id = 'loading-indicator'; // ID to find and remove it later
+        loadingDiv.classList.add('message', 'bot-message');
         
+        loadingDiv.innerHTML = `
+            <div class="loading-bubble">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        `;
+        
+        chatWindow.appendChild(loadingDiv);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    // Helper: Remove Loading Indicator
+    function hideLoading() {
+        const loadingDiv = document.getElementById('loading-indicator');
+        if (loadingDiv) {
+            loadingDiv.remove();
+        }
+    }
+
+    // Handle Submit
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
         const message = userInput.value.trim();
         if (!message) return;
 
-        // 1. Show User Message Immediately
+        // 1. Show User Message
         appendMessage(message, 'user');
-        userInput.value = ''; // Clear input
+        userInput.value = '';
 
-        // 2. Create the JSON payload (This is where "msg" comes from!)
-        const payload = { msg: message };
+        // 2. Show Loading Dots
+        showLoading();
 
         try {
-            // 3. Send POST request to Flask
             const response = await fetch('/chat', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ msg: message })
             });
-
+            
             const data = await response.json();
 
-            // 4. Show Bot Response
+            // 3. Remove Loading & Show Answer
+            hideLoading();
             appendMessage(data.response, 'bot');
 
         } catch (error) {
             console.error('Error:', error);
-            appendMessage("Sorry, something went wrong. Please try again.", 'bot');
+            hideLoading();
+            appendMessage("Sorry, connection failed.", 'bot');
         }
     });
-    </script>
-
+</script>
 </body>
 </html>
