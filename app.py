@@ -28,7 +28,7 @@ def get_documents():
 
 #Chunking
 def get_chunks(docs):
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size = 2000, chunk_overlap=400, length_function=len)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size = 1200, chunk_overlap=400, length_function=len)
     chunks = text_splitter.split_documents(docs)
     return chunks
 
@@ -51,10 +51,10 @@ def get_embeddings():
 
 def get_retriever():
     db = get_embeddings()
-    retriever = db.as_retriever(search_type="similarity", search_kwargs={"k":10})
+    retriever = db.as_retriever(search_type="similarity", search_kwargs={"k":8})
     return retriever
 
-llm = ChatOllama(model="llama3.1:8b")
+llm = ChatOllama(model="gemma3:1b")
 
 # Hitsory aware retriever
 context_q_prompt = ChatPromptTemplate.from_messages([("system", contextualize_q_system_prompt), MessagesPlaceholder("chat_history"), ("human","{input}"),])
